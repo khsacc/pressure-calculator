@@ -87,6 +87,7 @@ export default function Home() {
             <TextField
               required
               label=""
+              type="number"
               defaultValue={defaultValues.integer}
               variant="outlined"
               className={classes.numericalInput}
@@ -98,6 +99,7 @@ export default function Home() {
             <TextField
               required
               label=""
+              type="number"
               defaultValue={defaultValues.decimal}
               variant="outlined"
               className={classes.numericalInput}
@@ -110,6 +112,7 @@ export default function Home() {
             <TextField
               required
               label=""
+              type="number"
               defaultValue={defaultValues.integer}
               variant="outlined"
               className={classes.numericalInput}
@@ -121,6 +124,7 @@ export default function Home() {
             <TextField
               required
               label=""
+              type="number"
               defaultValue={defaultValues.decimal}
               variant="outlined"
               className={classes.numericalInput}
