@@ -1,26 +1,73 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import {makeStyles} from '@material-ui/core'
-import {Theme} from '../styles/theme'
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import { makeStyles, Paper, TextField } from "@material-ui/core";
+import { Theme } from "../styles/theme";
+import { useEffect, useState } from "react";
+import { delLocale } from "next/dist/next-server/lib/router/router";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    minHeight: '100vh',
-    padding: '0 0.5rem',
-    display: 'flex',
-    flexDirection: 'column',
+    minHeight: "100vh",
+    padding: "0 0.5rem",
+    display: "flex",
+    flexDirection: "column",
     // justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
+    alignItems: "center",
+    height: "100vh",
   },
   heading: {
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
+  },
+  numericalInput: {
+    width: 100,
+  },
+  dot: {
+    fontWeight: "bold",
+    fontSize: "2em",
+    lineHeight: "2",
+    margin: "0 5px",
+  },
+  paper: {
+    padding: 10,
+    margin: '10px 0',
+  },
+  display: {
+    fontSize: 25,
   }
-}))
+}));
 
 export default function Home() {
-  const classes = useStyles(Theme)
+  const classes = useStyles(Theme);
+
+  const defaultValues = {
+    integer: '693',
+    decimal: '0',
+  };
+
+  const calcR = (int: string, dec: string) => {
+    const ret = Number(Number(int) + ((Number(dec) / (10 ** String(dec).length))));
+    return ret
+  };
+
+  const [refRubyInt, setRefRubyInt] = useState(defaultValues.integer)
+  const [refRubyDec, setRefRubyDec] = useState(defaultValues.decimal)
+  const [samRubyInt, setSamRubyInt] = useState(defaultValues.integer)
+  const [samRubyDec, setSamRubyDec] = useState(defaultValues.decimal)
+
+  // Mao: P = 1904 * ((λ/λ<sub>0</sub>)<sup>5</sup> - 1) / 5
+  const calcPMao = (ref: number, sam: number) => {
+    const raw = 1904 * (((sam / ref) ** 5)  - 1) / 5;
+    console.log(raw)
+    return Math.round(raw / 0.001) * 0.001;
+  }
+  const [estimatedP, setEstimatedP] = useState(0)
+
+  useEffect(() => {
+    // console.log(calcR(refRubyInt, refRubyDec), calcR(samRubyInt, samRubyDec))
+    setEstimatedP(calcPMao(calcR(refRubyInt, refRubyDec), calcR(samRubyInt, samRubyDec)))
+  }, [refRubyInt, refRubyDec, samRubyInt, samRubyDec])
+
   return (
     <div className={classes.container}>
       <Head>
@@ -30,11 +77,68 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1 className={classes.heading}>
-          Pressure Calculator
-        </h1>
+        <h1 className={classes.heading}>Pressure Calculator</h1>
 
-        </main>
+        <div>
+          <form>
+            <h2>
+              Reference Ruby (λ<sub>0</sub>)
+            </h2>
+            <TextField
+              required
+              label=""
+              defaultValue={defaultValues.integer}
+              variant="outlined"
+              className={classes.numericalInput}
+              onChange={(e) => {
+                setRefRubyInt(e.target.value)
+              }}
+            />
+            <span className={classes.dot}>.</span>
+            <TextField
+              required
+              label=""
+              defaultValue={defaultValues.decimal}
+              variant="outlined"
+              className={classes.numericalInput}
+              onChange={(e) => {
+                setRefRubyDec(e.target.value)
+              }}
+            />
+
+            <h2>Sample Ruby (λ)</h2>
+            <TextField
+              required
+              label=""
+              defaultValue={defaultValues.integer}
+              variant="outlined"
+              className={classes.numericalInput}
+              onChange={(e) => {
+                setSamRubyInt(e.target.value)
+              }}
+            />
+            <span className={classes.dot}>.</span>
+            <TextField
+              required
+              label=""
+              defaultValue={defaultValues.decimal}
+              variant="outlined"
+              className={classes.numericalInput}
+              onChange={(e) => {
+                setSamRubyDec(e.target.value)
+              }}
+            />
+          </form>
+          <Paper className={classes.paper} elevation={3}>
+            <p className={classes.display}>
+              {estimatedP} GPa
+            </p>
+            <p>
+              Mao: P = 1904 * ((λ/λ<sub>0</sub>)<sup>5</sup> - 1) / 5
+            </p>
+          </Paper>
+        </div>
+      </main>
     </div>
-  )
+  );
 }
