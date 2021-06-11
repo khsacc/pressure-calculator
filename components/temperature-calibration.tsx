@@ -1,27 +1,11 @@
 import { makeStyles } from "@material-ui/core";
 import { NextPage } from "next";
 import { TextField } from "@material-ui/core";
-import { defaultValues, calcR } from "./common";
+import { defaultValues, calcR, useCommonStyles } from "./common";
 import { useEffect, useState } from "react";
 
-const useStyles = makeStyles(() => ({
-  numericalInput: {
-    width: 100,
-  },
-  dot: {
-    fontWeight: "bold",
-    fontSize: "2em",
-    lineHeight: "2",
-    margin: "0 5px",
-  },
-  atMark: {
-    fontSize: '1.5em',
-    margin: "0 5px",
-  }
-}));
-
 export const TemperatureCalibration: NextPage = () => {
-  const classes = useStyles();
+  const classes = useCommonStyles();
 
   const [refRubyInt, setRefRubyInt] = useState(defaultValues.integer);
   const [refRubyDec, setRefRubyDec] = useState(defaultValues.decimal);

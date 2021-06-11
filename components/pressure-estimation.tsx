@@ -121,11 +121,12 @@ export const PressureEstimation: NextPage = () => {
             />
           </form>
           <Paper className={classes.paper} elevation={3}>
+            <p>Estimated sample pressure</p>
             <p className={classes.display}>
               {estimatedP} GPa
             </p>
             <p>
-              Mao: P = 1904 * ((λ/λ<sub>0</sub>)<sup>5</sup> - 1) / 5
+              Mao (1986): <br /> P = 1904 * ((λ/λ<sub>0</sub>)<sup>5</sup> - 1) / 5
             </p>
           </Paper></>
 }
