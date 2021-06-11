@@ -4,6 +4,7 @@ import { Theme } from "../styles/theme";
 import { useEffect, useState } from "react";
 import { PressureEstimation } from "../components/pressure-estimation";
 import { TemperatureCalibration } from "../components/temperature-calibration";
+import { RubyEstimation } from "../components/ruby-estimation";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     // justifyContent: 'center',
     alignItems: "center",
-    height: "100vh",
+    // height: "100vh",
   },
   heading: {
     color: theme.palette.primary.main,
@@ -45,6 +46,9 @@ export default function Home() {
         {/* <div className={classes.section}>
           <TemperatureCalibration />
         </div> */}
+        <div className={classes.section}>
+        <RubyEstimation />
+        </div>
       </main>
     </div>
   );
