@@ -57,7 +57,7 @@ export const PressureEstimation: NextPage = () => {
   // Mao: P = 1904 * ((λ/λ<sub>0</sub>)<sup>5</sup> - 1) / 5
   const calcPMao = (ref: number, sam: number) => {
     const raw = (1904 * ((sam / ref) ** 5 - 1)) / 5;
-    console.log(raw);
+    // console.log(raw);
     return Math.round(raw / 0.001) * 0.001;
   };
   const [estimatedP, setEstimatedP] = useState(0);

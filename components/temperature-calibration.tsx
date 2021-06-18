@@ -17,7 +17,7 @@ export const TemperatureCalibration: NextPage = () => {
   useEffect(() => {
     const wavenumber = ((1/calcR(refRubyInt, refRubyDec) )) - 3.551 * (10 ** 8) * ((Math.log(Number(tarTemp) / Number(refRubyTemp))) ** 11.54)
 
-    console.log((Math.log(Number(tarTemp) / Number(refRubyTemp))) ** (11.54))
+    // console.log((Math.log(Number(tarTemp) / Number(refRubyTemp))) ** (11.54))
     setCalcCuby((1 / (wavenumber)))
   }, [refRubyInt, refRubyDec, refRubyTemp, tarTemp])
 
