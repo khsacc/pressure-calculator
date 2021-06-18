@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { useCommonStyles } from "./common";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import { ListItem } from "@material-ui/core";
+import React from "react";
 
 const useStyles = makeStyles((theme) => ({
   timelineIcon: {
@@ -186,9 +187,13 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
     document.execCommand("copy");
   };
 
+  // Accordion
+  const [expanded1, setExpanded1] = useState(true);
+  const [expanded2, setExpanded2] = useState(true)
+
   return (
     <div className={classes.accordionWrap}>
-      <Accordion className={classes.accordion} expanded>
+      <Accordion className={classes.accordion}  expanded={expanded1} onChange={() => {setExpanded1(!expanded1)}}>
         <AccordionSummary>
           <TimelineIcon className={classes.timelineIcon} color="primary" />
           p-T path record control
@@ -225,7 +230,7 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
           </Button>
         </AccordionDetails>
       </Accordion>
-      <Accordion expanded>
+      <Accordion  expanded={expanded2} onChange={() => {setExpanded2(!expanded2)}}>
         <AccordionSummary>p-T path record raw data</AccordionSummary>
         <AccordionDetails className={classes.accordionDetail}>
           <List>
