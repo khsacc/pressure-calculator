@@ -135,7 +135,7 @@ export const PressureEstimation: NextPage = () => {
         </Paper>
       </div>
 
-      <PTRecord currentData={{pressure: estimatedP, samRuby: calcR(samRubyInt, samRubyInt), refRuby: calcR(refRubyInt, refRubyDec)}} />
+      <PTRecord currentData={{pressure: estimatedP, samRuby: calcR(samRubyInt, samRubyDec), refRuby: calcR(refRubyInt, refRubyDec)}} />
     </div>
   );
 };
