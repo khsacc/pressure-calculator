@@ -112,7 +112,13 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
               x: {
                 ticks: {
                   callback: function (label: number) {
-                    return label.toString().replace(/\,/g, "").replace(/(.{4})(.{2})(.{2})(.{2})(.{2})/, "$1/$2/$3 $4:$5");
+                    return label
+                      .toString()
+                      .replace(/\,/g, "")
+                      .replace(
+                        /(.{4})(.{2})(.{2})(.{2})(.{2})/,
+                        "$1/$2/$3 $4:$5"
+                      );
                   },
                 },
               },
@@ -132,7 +138,13 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
               x: {
                 ticks: {
                   callback: function (label: number) {
-                    return label.toString().replace(/\,/g, "").replace(/(.{4})(.{2})(.{2})(.{2})(.{2})/, "$1/$2/$3 $4:$5");
+                    return label
+                      .toString()
+                      .replace(/\,/g, "")
+                      .replace(
+                        /(.{4})(.{2})(.{2})(.{2})(.{2})/,
+                        "$1/$2/$3 $4:$5"
+                      );
                   },
                 },
               },

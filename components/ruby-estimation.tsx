@@ -17,11 +17,13 @@ export const RubyEstimation: NextPage = () => {
       4.49e-2 * temp -
       4.81e-4 * Math.pow(temp, 2) +
       3.71e-7 * Math.pow(temp, 3);
-    setEstimatedR0Ragan(Math.round(10 ** 7 / (estWavenumberRagan * 0.001)) * 0.001);
+    setEstimatedR0Ragan(
+      Math.round(10 ** 7 / (estWavenumberRagan * 0.001)) * 0.001
+    );
 
     // 678.63 (*O.Ol) + 7.8~ 10m3( hO.2) (T-273) + 0.031
-// ( ~0.003)P + 0.8 ( AO. 1) X 10V3 p, 
-    // const estJahren = 678.63 + 
+    // ( ~0.003)P + 0.8 ( AO. 1) X 10V3 p,
+    // const estJahren = 678.63 +
   }, [refRubyTemp]);
 
   return (

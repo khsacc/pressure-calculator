@@ -1,13 +1,13 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 export const defaultValues = {
-  integer: '693',
-  decimal: '0',
+  integer: "693",
+  decimal: "0",
 };
 
 export const calcR = (int: string, dec: string) => {
-  const ret = Number(Number(int) + ((Number(dec) / (10 ** String(dec).length))));
-  return ret
+  const ret = Number(Number(int) + Number(dec) / 10 ** String(dec).length);
+  return ret;
 };
 
 export const useCommonStyles = makeStyles((theme) => ({
@@ -34,7 +34,7 @@ export const useCommonStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: 10,
-    margin: '10px 0',
+    margin: "10px 0",
   },
   display: {
     fontSize: 25,
@@ -42,12 +42,12 @@ export const useCommonStyles = makeStyles((theme) => ({
   section: {
     paddingBottom: 10,
     borderBottom: `1px solid ${theme.palette.primary.main}`,
-    borderTop: `1px solid ${theme.palette.primary.main}`
+    borderTop: `1px solid ${theme.palette.primary.main}`,
   },
   atMark: {
-    fontSize: '1.5em',
+    fontSize: "1.5em",
     margin: "0 5px",
-  }
+  },
 }));
 
 export type RawDatum = {

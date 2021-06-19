@@ -9,17 +9,21 @@ export const TemperatureCalibration: NextPage = () => {
 
   const [refRubyInt, setRefRubyInt] = useState(defaultValues.integer);
   const [refRubyDec, setRefRubyDec] = useState(defaultValues.decimal);
-  const [refRubyTemp, setRefRubyTemp] = useState('300')
-  const [tarTemp, setTarTemp] = useState('300')
+  const [refRubyTemp, setRefRubyTemp] = useState("300");
+  const [tarTemp, setTarTemp] = useState("300");
 
-  const [calcRuby, setCalcCuby] = useState(0)
+  const [calcRuby, setCalcCuby] = useState(0);
 
   useEffect(() => {
-    const wavenumber = ((1/calcR(refRubyInt, refRubyDec) )) - 3.551 * (10 ** 8) * ((Math.log(Number(tarTemp) / Number(refRubyTemp))) ** 11.54)
+    const wavenumber =
+      1 / calcR(refRubyInt, refRubyDec) -
+      3.551 *
+        10 ** 8 *
+        Math.log(Number(tarTemp) / Number(refRubyTemp)) ** 11.54;
 
     // console.log((Math.log(Number(tarTemp) / Number(refRubyTemp))) ** (11.54))
-    setCalcCuby((1 / (wavenumber)))
-  }, [refRubyInt, refRubyDec, refRubyTemp, tarTemp])
+    setCalcCuby(1 / wavenumber);
+  }, [refRubyInt, refRubyDec, refRubyTemp, tarTemp]);
 
   return (
     <>

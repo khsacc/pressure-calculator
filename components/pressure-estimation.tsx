@@ -9,7 +9,7 @@ import { PTRecord } from "./ptRecord";
 const useStyles = makeStyles((theme) => ({
   whole: {
     display: "flex",
-    alignItems: 'flex-start'
+    alignItems: "flex-start",
   },
   container: {
     minHeight: "100vh",
@@ -135,7 +135,13 @@ export const PressureEstimation: NextPage = () => {
         </Paper>
       </div>
 
-      <PTRecord currentData={{pressure: estimatedP, samRuby: calcR(samRubyInt, samRubyDec), refRuby: calcR(refRubyInt, refRubyDec)}} />
+      <PTRecord
+        currentData={{
+          pressure: estimatedP,
+          samRuby: calcR(samRubyInt, samRubyDec),
+          refRuby: calcR(refRubyInt, refRubyDec),
+        }}
+      />
     </div>
   );
 };

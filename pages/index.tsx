@@ -47,7 +47,7 @@ export default function Home() {
           <TemperatureCalibration />
         </div> */}
         <div className={classes.section}>
-        <RubyEstimation />
+          <RubyEstimation />
         </div>
       </main>
     </div>

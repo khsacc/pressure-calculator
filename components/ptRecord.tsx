@@ -92,7 +92,7 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
     if (previousRecord) {
       setLocalStorageData(previousRecord);
     }
-    setCsvData(generateCSV())
+    setCsvData(generateCSV());
   }, []);
 
   useEffect(() => {
@@ -187,21 +187,20 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
         String(datum.samRuby),
       ]),
     ];
-    
-      return arr
-        .map((row) =>
-          row.map((str) => '"' + (str ? str.replace(/"/g, '""') : "") + '"')
-        )
-        .map((row) => row.join(","))
-        .join("\n");
-    
+
+    return arr
+      .map((row) =>
+        row.map((str) => '"' + (str ? str.replace(/"/g, '""') : "") + '"')
+      )
+      .map((row) => row.join(","))
+      .join("\n");
   };
 
   const [csvData, setCsvData] = useState("");
 
   useEffect(() => {
-    setCsvData(generateCSV())
-  }, [localStorageData])
+    setCsvData(generateCSV());
+  }, [localStorageData]);
 
   // Accordion
   const [expanded1, setExpanded1] = useState(true);
@@ -264,20 +263,25 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
             Copy Data to Clipboard
           </Button>
           <br />
-          <a download={`PTPath.csv`} href={`data:text/csv;charset=utf-16,${encodeURIComponent('\uFEFF' + csvData)}`}>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={() => {
-              // copyData();
-              console.log(localStorageDataJSON)
-            }}
+          <a
+            download={`PTPath.csv`}
+            href={`data:text/csv;charset=utf-16,${encodeURIComponent(
+              "\uFEFF" + csvData
+            )}`}
           >
-            Export data as CSV
-          </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() => {
+                // copyData();
+                console.log(localStorageDataJSON);
+              }}
+            >
+              Export data as CSV
+            </Button>
           </a>
-          
+
           <br />
           <Button
             className={classes.button}
@@ -324,7 +328,6 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
               </ListItem>
             ))}
           </List>
-
         </AccordionDetails>
       </Accordion>
       <Accordion
