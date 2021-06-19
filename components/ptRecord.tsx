@@ -218,7 +218,7 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
       >
         <AccordionSummary>
           <TimelineIcon className={classes.timelineIcon} color="primary" />
-          p-T path record control
+          p-T path record control (click here to {expanded1 ? "close" : "open"})
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetail}>
           <Typography>Current Temperature [K]</Typography>
@@ -299,7 +299,10 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
           setExpanded2(!expanded2);
         }}
       >
-        <AccordionSummary>p-T path record raw data</AccordionSummary>
+        <AccordionSummary>
+          p-T path record raw data (click here to {expanded2 ? "close" : "open"}
+          )
+        </AccordionSummary>
         <AccordionDetails className={classes.accordionDetail}>
           <List>
             {localStorageDataJSON.map((datum, idx) => (
@@ -336,7 +339,9 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
           setExpanded3(!expanded3);
         }}
       >
-        <AccordionSummary>p-T path record chart</AccordionSummary>
+        <AccordionSummary>
+          p-T path record chart (click here to {expanded3 ? "close" : "open"})
+        </AccordionSummary>
         <AccordionDetails className={classes.accordionDetail}>
           <PTRecordChart data={localStorageDataJSON} />
         </AccordionDetails>
