@@ -14,7 +14,6 @@ import TimelineIcon from "@material-ui/icons/Timeline";
 import CreateIcon from "@material-ui/icons/Create";
 import { NextPage } from "next";
 import { Theme } from "../styles/theme";
-import { create } from "jss";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useCommonStyles, RawDatum, Datum } from "./common";
@@ -22,7 +21,6 @@ import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import { ListItem } from "@material-ui/core";
 import React from "react";
 import { PTRecordChart } from "./ptRecordChart";
-
 
 const useStyles = makeStyles((theme) => ({
   timelineIcon: {
@@ -55,9 +53,11 @@ const useStyles = makeStyles((theme) => ({
   deleteIcon: {
     marginRight: 5,
   },
+  button: {
+    margin: "5px 0",
+    display: "inline-block",
+  },
 }));
-
-
 
 const itemName = "ptRecord";
 
@@ -92,6 +92,7 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
     if (previousRecord) {
       setLocalStorageData(previousRecord);
     }
+    setCsvData(generateCSV())
   }, []);
 
   useEffect(() => {
@@ -175,6 +176,33 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
     document.execCommand("copy");
   };
 
+  const generateCSV = () => {
+    const arr = [
+      ["time", "temperature", "pressure", "reference", "sample"],
+      ...localStorageDataJSON.map((datum) => [
+        new Date(datum.time).toLocaleString(),
+        String(datum.temperature),
+        String(datum.pressure),
+        String(datum.refRuby),
+        String(datum.samRuby),
+      ]),
+    ];
+    
+      return arr
+        .map((row) =>
+          row.map((str) => '"' + (str ? str.replace(/"/g, '""') : "") + '"')
+        )
+        .map((row) => row.join(","))
+        .join("\n");
+    
+  };
+
+  const [csvData, setCsvData] = useState("");
+
+  useEffect(() => {
+    setCsvData(generateCSV())
+  }, [localStorageData])
+
   // Accordion
   const [expanded1, setExpanded1] = useState(true);
   const [expanded2, setExpanded2] = useState(true);
@@ -212,6 +240,7 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
             variant="contained"
             color="secondary"
             startIcon={<CreateIcon />}
+            className={classes.button}
             onClick={() => {
               recordCurrentValue({
                 pressure: currentData.pressure,
@@ -263,6 +292,7 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
           <Button
             variant="contained"
             color="primary"
+            className={classes.button}
             onClick={() => {
               copyData();
             }}
@@ -270,7 +300,23 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
             Copy Data to Clipboard
           </Button>
           <br />
+          <a download={`PTPath.csv`} href={`data:text/csv;charset=utf-16,${encodeURIComponent('\uFEFF' + csvData)}`}>
           <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => {
+              // copyData();
+              console.log(localStorageDataJSON)
+            }}
+          >
+            Export data as CSV
+          </Button>
+          </a>
+          
+          <br />
+          <Button
+            className={classes.button}
             onClick={() => {
               deleteAllValues();
             }}
@@ -279,10 +325,12 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
           </Button>
         </AccordionDetails>
       </Accordion>
-      <Accordion expanded={expanded3}
+      <Accordion
+        expanded={expanded3}
         onChange={() => {
           setExpanded3(!expanded3);
-        }}>
+        }}
+      >
         <AccordionSummary>p-T path record chart</AccordionSummary>
         <AccordionDetails className={classes.accordionDetail}>
           <PTRecordChart data={localStorageDataJSON} />
