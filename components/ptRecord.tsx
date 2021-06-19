@@ -300,6 +300,7 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
         }}
       >
         <AccordionSummary>
+          <TimelineIcon className={classes.timelineIcon} color="primary" />
           p-T path record raw data (click here to {expanded2 ? "close" : "open"}
           )
         </AccordionSummary>
@@ -340,6 +341,7 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
         }}
       >
         <AccordionSummary>
+          <TimelineIcon className={classes.timelineIcon} color="primary" />
           p-T path record chart (click here to {expanded3 ? "close" : "open"})
         </AccordionSummary>
         <AccordionDetails className={classes.accordionDetail}>
