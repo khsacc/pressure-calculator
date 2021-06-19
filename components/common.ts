@@ -49,3 +49,19 @@ export const useCommonStyles = makeStyles((theme) => ({
     margin: "0 5px",
   }
 }));
+
+export type RawDatum = {
+  pressure: number;
+  // temperature: number;
+  // time: number;
+  refRuby: number;
+  samRuby: number;
+};
+
+export type Datum = RawDatum & {
+  // pressure: number;
+  temperature: number;
+  time: number;
+  // refRuby: number;
+  // samRuby: number;
+};

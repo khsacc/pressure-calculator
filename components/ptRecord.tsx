@@ -17,10 +17,12 @@ import { Theme } from "../styles/theme";
 import { create } from "jss";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useCommonStyles } from "./common";
+import { useCommonStyles, RawDatum, Datum } from "./common";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import { ListItem } from "@material-ui/core";
 import React from "react";
+import { PTRecordChart } from "./ptRecordChart";
+
 
 const useStyles = makeStyles((theme) => ({
   timelineIcon: {
@@ -55,21 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type RawDatum = {
-  pressure: number;
-  // temperature: number;
-  // time: number;
-  refRuby: number;
-  samRuby: number;
-};
 
-type Datum = RawDatum & {
-  // pressure: number;
-  temperature: number;
-  time: number;
-  // refRuby: number;
-  // samRuby: number;
-};
 
 const itemName = "ptRecord";
 
@@ -189,11 +177,18 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
 
   // Accordion
   const [expanded1, setExpanded1] = useState(true);
-  const [expanded2, setExpanded2] = useState(true)
+  const [expanded2, setExpanded2] = useState(true);
+  const [expanded3, setExpanded3] = useState(false);
 
   return (
     <div className={classes.accordionWrap}>
-      <Accordion className={classes.accordion}  expanded={expanded1} onChange={() => {setExpanded1(!expanded1)}}>
+      <Accordion
+        className={classes.accordion}
+        expanded={expanded1}
+        onChange={() => {
+          setExpanded1(!expanded1);
+        }}
+      >
         <AccordionSummary>
           <TimelineIcon className={classes.timelineIcon} color="primary" />
           p-T path record control
@@ -230,7 +225,12 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
           </Button>
         </AccordionDetails>
       </Accordion>
-      <Accordion  expanded={expanded2} onChange={() => {setExpanded2(!expanded2)}}>
+      <Accordion
+        expanded={expanded2}
+        onChange={() => {
+          setExpanded2(!expanded2);
+        }}
+      >
         <AccordionSummary>p-T path record raw data</AccordionSummary>
         <AccordionDetails className={classes.accordionDetail}>
           <List>
@@ -277,6 +277,15 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
           >
             Delete all data
           </Button>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion expanded={expanded3}
+        onChange={() => {
+          setExpanded3(!expanded3);
+        }}>
+        <AccordionSummary>p-T path record chart</AccordionSummary>
+        <AccordionDetails className={classes.accordionDetail}>
+          <PTRecordChart data={localStorageDataJSON} />
         </AccordionDetails>
       </Accordion>
     </div>
