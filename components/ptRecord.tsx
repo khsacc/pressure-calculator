@@ -252,6 +252,41 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
           >
             Record current value
           </Button>
+          <br />
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => {
+              copyData();
+            }}
+          >
+            Copy Data to Clipboard
+          </Button>
+          <br />
+          <a download={`PTPath.csv`} href={`data:text/csv;charset=utf-16,${encodeURIComponent('\uFEFF' + csvData)}`}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => {
+              // copyData();
+              console.log(localStorageDataJSON)
+            }}
+          >
+            Export data as CSV
+          </Button>
+          </a>
+          
+          <br />
+          <Button
+            className={classes.button}
+            onClick={() => {
+              deleteAllValues();
+            }}
+          >
+            Delete all data
+          </Button>
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -289,40 +324,7 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
               </ListItem>
             ))}
           </List>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={() => {
-              copyData();
-            }}
-          >
-            Copy Data to Clipboard
-          </Button>
-          <br />
-          <a download={`PTPath.csv`} href={`data:text/csv;charset=utf-16,${encodeURIComponent('\uFEFF' + csvData)}`}>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={() => {
-              // copyData();
-              console.log(localStorageDataJSON)
-            }}
-          >
-            Export data as CSV
-          </Button>
-          </a>
-          
-          <br />
-          <Button
-            className={classes.button}
-            onClick={() => {
-              deleteAllValues();
-            }}
-          >
-            Delete all data
-          </Button>
+
         </AccordionDetails>
       </Accordion>
       <Accordion
