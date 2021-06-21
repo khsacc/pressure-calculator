@@ -47,6 +47,7 @@ export const useCommonStyles = makeStyles((theme) => ({
   atMark: {
     fontSize: "1.5em",
     margin: "0 5px",
+    lineHeight: "2.7",
   },
 }));
 

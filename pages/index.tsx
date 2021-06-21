@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { PressureEstimation } from "../components/pressure-estimation";
 import { TemperatureCalibration } from "../components/temperature-calibration";
 import { RubyEstimation } from "../components/ruby-estimation";
+import { Fit } from "../components/sample-estimation";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -40,15 +41,18 @@ export default function Home() {
       <main>
         <h1 className={classes.heading}>Pressure Calculator</h1>
 
-        <div className={classes.section}>
+        <section className={classes.section}>
           <PressureEstimation />
-        </div>
+        </section>
         {/* <div className={classes.section}>
           <TemperatureCalibration />
         </div> */}
-        <div className={classes.section}>
+        <section className={classes.section}>
           <RubyEstimation />
-        </div>
+        </section>
+        {/* <section className={classes.section}>
+          <Fit />
+        </section> */}
       </main>
     </div>
   );

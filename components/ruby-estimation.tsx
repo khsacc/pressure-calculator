@@ -28,8 +28,8 @@ export const RubyEstimation: NextPage = () => {
 
   return (
     <>
-      <h2>Temperature for Estimation [K]</h2>
-      <span className={classes.atMark}>@</span>
+      <h2>Ruby Fluorescence Estimation @ambient pressure</h2>
+      <span className={classes.atMark}>T=</span>
       <TextField
         required
         label=""
