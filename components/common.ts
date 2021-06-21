@@ -1,7 +1,7 @@
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 export const defaultValues = {
-  integer: "693",
+  integer: "694",
   decimal: "0",
 };
 
