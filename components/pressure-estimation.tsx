@@ -2,6 +2,7 @@ import classes from "*.module.css";
 import { NextPage } from "next";
 import React, { useState, useEffect } from "react";
 import {
+  Checkbox,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -12,7 +13,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import { Theme } from "../styles/theme";
-import { defaultValues, calcR } from "./common";
+import { defaultValues, calcR, useCommonStyles } from "./common";
 import { PTRecord } from "./ptRecord";
 import { equal } from "assert/strict";
 
@@ -58,10 +59,20 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey[500],
     fontSize: "0.7em",
   },
+  caution: {
+    color: theme.palette.error.main,
+  },
+  calibration: {
+    marginTop: 10,
+  },
+  calibration__disabled: {
+    color: theme.palette.grey[500],
+  },
 }));
 
 export const PressureEstimation: NextPage = () => {
   const classes = useStyles(Theme);
+  const commonClasses = useCommonStyles(Theme);
 
   const [refRubyInt, setRefRubyInt] = useState(defaultValues.integer);
   const [refRubyDec, setRefRubyDec] = useState(defaultValues.decimal);
@@ -84,15 +95,60 @@ export const PressureEstimation: NextPage = () => {
     setEq((event.target as HTMLInputElement).value as Equation);
   };
 
+  const [tempCal, setTempCal] = useState(false);
+  const handleTempCalChange = () => {
+    setTempCal(!tempCal);
+  };
+
+  const [refTempCal, setRefTempCal] = useState(300);
+  const [samTempCal, setSamTempCal] = useState(300);
+
+  // function to output a calibrated reference ruby fluorescence line (R0)
+  // assuming that temperature dependence and pressure dependence of R0 are independent to each other
+  const calibrateTemp = (
+    initialRefRuby: number,
+    refTemp: number,
+    samTemp: number
+  ) => {
+    // let's define function to compute wavelength shift as temperature changed compared to that @296K
+    const getDiffRuby = (__refTemp: number) => {
+      const __deltaRefTemp = refTemp - 296;
+      if (__refTemp < 50) {
+        return -0.887;
+      } else if (__refTemp < 296) {
+        return (
+          0.006644 * __deltaRefTemp +
+          6.7652e-6 * __deltaRefTemp ** 2 -
+          2.3316e-8 * __deltaRefTemp ** 3
+        );
+      } else {
+        return (
+          0.007464 * __deltaRefTemp -
+          0.3125e-6 * __deltaRefTemp ** 2 +
+          8.7633e-9 * __deltaRefTemp ** 3
+        );
+      }
+    };
+    // let's estimate R0 line @296K @ 1atm
+    const estimatedAmbientRuby = initialRefRuby - getDiffRuby(refTemp);
+    // let's estimate R0 line @sample temperature @1atm
+    const estimatedTrueRefRuby = estimatedAmbientRuby + getDiffRuby(samTemp);
+    return estimatedTrueRefRuby;
+  };
+
   const calcP = (ref: number, sam: number, eq: Equation) => {
-    const diffFraction = (sam - ref) / ref;
+    const calibRef = !tempCal
+      ? ref
+      : calibrateTemp(ref, refTempCal, samTempCal);
+
+    const diffFraction = (sam - calibRef) / calibRef;
 
     switch (eq) {
       case "Mao-nonhydro":
-        const rawMaoNonhydro = (1904 * ((sam / ref) ** 5 - 1)) / 5;
+        const rawMaoNonhydro = (1904 * ((sam / calibRef) ** 5 - 1)) / 5;
         return Math.round(rawMaoNonhydro / 0.001) * 0.001;
       case "Mao-hydro":
-        const rawMaoHydro = (1904 * ((sam / ref) ** 7.665 - 1)) / 7.665;
+        const rawMaoHydro = (1904 * ((sam / calibRef) ** 7.665 - 1)) / 7.665;
         return Math.round(rawMaoHydro / 0.001) * 0.001;
       case "Dorogokupets":
         const rawDorogokupets = 1884 * diffFraction * (1 + 5.5 * diffFraction);
@@ -105,7 +161,27 @@ export const PressureEstimation: NextPage = () => {
     setEstimatedP(
       calcP(calcR(refRubyInt, refRubyDec), calcR(samRubyInt, samRubyDec), eq)
     );
-  }, [refRubyInt, refRubyDec, samRubyInt, samRubyDec, eq]);
+  }, [
+    refRubyInt,
+    refRubyDec,
+    samRubyInt,
+    samRubyDec,
+    eq,
+    refTempCal,
+    samTempCal,
+  ]);
+
+  const TempCalibCaution: NextPage<{ temp: number }> = ({ temp }) => {
+    if (temp > 900) {
+      return (
+        <div className={classes.caution}>
+          Temperature should be below 900K to calibrate
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
 
   return (
     <div className={classes.whole}>
@@ -137,6 +213,28 @@ export const PressureEstimation: NextPage = () => {
               setRefRubyDec(e.target.value);
             }}
           />
+          <div>
+            <div
+              className={[
+                classes.calibration,
+                tempCal ? "" : classes.calibration__disabled,
+              ].join(" ")}
+            >
+              <span className={commonClasses.atMark}>Ref T[K] =</span>
+              <TextField
+                label=""
+                type="number"
+                disabled={!tempCal}
+                defaultValue={300}
+                variant="outlined"
+                className={classes.numericalInput}
+                onChange={(e) => {
+                  setRefTempCal(Number(e.target.value));
+                }}
+              ></TextField>
+              <TempCalibCaution temp={refTempCal} />
+            </div>
+          </div>
 
           <h2>Sample Ruby (λ) [nm]</h2>
           <TextField
@@ -162,6 +260,37 @@ export const PressureEstimation: NextPage = () => {
               setSamRubyDec(e.target.value);
             }}
           />
+          {/* <br /> */}
+
+          <div
+            className={[
+              classes.calibration,
+              tempCal ? "" : classes.calibration__disabled,
+            ].join(" ")}
+          >
+            <span className={commonClasses.atMark}>Sample T[K] =</span>
+            <TextField
+              label=""
+              type="number"
+              defaultValue={300}
+              variant="outlined"
+              disabled={!tempCal}
+              className={classes.numericalInput}
+              onChange={(e) => {
+                setSamTempCal(Number(e.target.value));
+              }}
+            ></TextField>
+            <TempCalibCaution temp={samTempCal} />
+          </div>
+
+          <br />
+          <FormControlLabel
+            control={
+              <Checkbox checked={tempCal} onChange={handleTempCalChange} />
+            }
+            label="Temperature Calibration"
+          />
+          <br />
         </form>
         <Paper className={classes.paper} elevation={3}>
           <p>Estimated sample pressure</p>
