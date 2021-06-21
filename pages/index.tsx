@@ -6,6 +6,7 @@ import { PressureEstimation } from "../components/pressure-estimation";
 import { TemperatureCalibration } from "../components/temperature-calibration";
 import { RubyEstimation } from "../components/ruby-estimation";
 import { Fit } from "../components/sample-estimation";
+import { Ref } from "../components/ref";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -53,6 +54,9 @@ export default function Home() {
         {/* <section className={classes.section}>
           <Fit />
         </section> */}
+        <section className={classes.section}>
+          <Ref />
+        </section>
       </main>
     </div>
   );
