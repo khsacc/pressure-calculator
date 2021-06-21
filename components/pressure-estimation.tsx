@@ -288,7 +288,13 @@ export const PressureEstimation: NextPage = () => {
             control={
               <Checkbox checked={tempCal} onChange={handleTempCalChange} />
             }
-            label="Temperature Calibration"
+            label={
+              <>
+                Temperature Calibration
+                <br />
+                [Datchi et. al. (2007)]
+              </>
+            }
           />
           <br />
         </form>
