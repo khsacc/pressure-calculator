@@ -68,6 +68,9 @@ const useStyles = makeStyles((theme) => ({
   calibration__disabled: {
     color: theme.palette.grey[500],
   },
+  calibratedRuby: {
+    color: theme.palette.grey[500],
+  },
 }));
 
 export const PressureEstimation: NextPage = () => {
@@ -103,6 +106,8 @@ export const PressureEstimation: NextPage = () => {
   const [refTempCal, setRefTempCal] = useState(300);
   const [samTempCal, setSamTempCal] = useState(300);
 
+  const [calibratedRuby, setCalibratedRuby] = useState(0);
+
   // function to output a calibrated reference ruby fluorescence line (R0)
   // assuming that temperature dependence and pressure dependence of R0 are independent to each other
   const calibrateTemp = (
@@ -133,6 +138,7 @@ export const PressureEstimation: NextPage = () => {
     const estimatedAmbientRuby = initialRefRuby - getDiffRuby(refTemp);
     // let's estimate R0 line @sample temperature @1atm
     const estimatedTrueRefRuby = estimatedAmbientRuby + getDiffRuby(samTemp);
+    setCalibratedRuby(Math.round(estimatedTrueRefRuby / 0.001) * 0.001);
     return estimatedTrueRefRuby;
   };
 
@@ -233,6 +239,11 @@ export const PressureEstimation: NextPage = () => {
                 }}
               ></TextField>
               <TempCalibCaution temp={refTempCal} />
+              {tempCal && (
+                <div className={classes.calibratedRuby}>
+                  Calibrated result: {calibratedRuby}nm
+                </div>
+              )}
             </div>
           </div>
 
