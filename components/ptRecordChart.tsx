@@ -54,7 +54,7 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
         pointHitRadius: 10,
         showLine: true,
         data: data.map((datum) => ({
-          x: getTimeNum(new Date(datum.time)),
+          x: datum.time,
           y: datum.temperature,
         })),
       },
@@ -78,7 +78,7 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
         pointHitRadius: 10,
         showLine: true,
         data: data.map((datum) => ({
-          x: getTimeNum(new Date(datum.time)),
+          x: datum.time,
           y: datum.pressure,
         })),
       },
@@ -112,13 +112,15 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
               x: {
                 ticks: {
                   callback: function (label: number) {
-                    return label
-                      .toString()
-                      .replace(/\,/g, "")
-                      .replace(
-                        /(.{4})(.{2})(.{2})(.{2})(.{2})/,
-                        "$1/$2/$3 $4:$5"
-                      );
+                    // console.log(label, new Date(label));
+                    return new Date(label).toLocaleString();
+                    // return label
+                    //   .toString()
+                    //   .replace(/\,/g, "")
+                    //   .replace(
+                    //     /(.{4})(.{2})(.{2})(.{2})(.{2})/,
+                    //     "$1/$2/$3 $4:$5"
+                    //   );
                   },
                 },
               },
@@ -138,13 +140,15 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
               x: {
                 ticks: {
                   callback: function (label: number) {
-                    return label
-                      .toString()
-                      .replace(/\,/g, "")
-                      .replace(
-                        /(.{4})(.{2})(.{2})(.{2})(.{2})/,
-                        "$1/$2/$3 $4:$5"
-                      );
+                    return new Date(label).toLocaleString();
+                    // console.log(label);
+                    // return label
+                    //   .toString()
+                    //   .replace(/\,/g, "")
+                    //   .replace(
+                    //     /(.{4})(.{2})(.{2})(.{2})(.{2})/,
+                    //     "$1/$2/$3 $4:$5"
+                    //   );
                   },
                 },
               },
