@@ -70,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
   },
   calibratedRuby: {
     color: theme.palette.grey[500],
+    height: "1em",
   },
 }));
 
@@ -116,30 +117,45 @@ export const PressureEstimation: NextPage = () => {
     samTemp: number
   ) => {
     // let's define function to compute wavelength shift as temperature changed compared to that @296K
-    const getDiffRuby = (__refTemp: number) => {
-      const __deltaRefTemp = refTemp - 296;
-      if (__refTemp < 50) {
-        return -0.887;
-      } else if (__refTemp < 296) {
-        return (
-          0.006644 * __deltaRefTemp +
-          6.7652e-6 * __deltaRefTemp ** 2 -
-          2.3316e-8 * __deltaRefTemp ** 3
-        );
-      } else {
-        return (
-          0.007464 * __deltaRefTemp -
-          0.3125e-6 * __deltaRefTemp ** 2 +
-          8.7633e-9 * __deltaRefTemp ** 3
-        );
-      }
+    const getEstimatedRuby = (__temp: number) => {
+      const estimatedWaveNumber =
+        14423 +
+        4.49e-2 * __temp -
+        4.81e-4 * __temp ** 2 +
+        3.71e-7 * __temp ** 3;
+      return (1 / estimatedWaveNumber) * 1e7;
     };
-    // let's estimate R0 line @296K @ 1atm
-    const estimatedAmbientRuby = initialRefRuby - getDiffRuby(refTemp);
-    // let's estimate R0 line @sample temperature @1atm
-    const estimatedTrueRefRuby = estimatedAmbientRuby + getDiffRuby(samTemp);
-    setCalibratedRuby(Math.round(estimatedTrueRefRuby / 0.001) * 0.001);
-    return estimatedTrueRefRuby;
+    // Dutch et. al. (2007) -> not so much good calibration
+    // const getDiffRuby = (__refTemp: number) => {
+    //   const __deltaRefTemp = refTemp - 296;
+    //   if (__refTemp < 50) {
+    //     return -0.887;
+    //   } else if (__refTemp < 296) {
+    //     return (
+    //       0.006644 * __deltaRefTemp +
+    //       6.7652e-6 * __deltaRefTemp ** 2 -
+    //       2.3316e-8 * __deltaRefTemp ** 3
+    //     );
+    //   } else {
+    //     return (
+    //       0.007464 * __deltaRefTemp -
+    //       0.3125e-6 * __deltaRefTemp ** 2 +
+    //       8.7633e-9 * __deltaRefTemp ** 3
+    //     );
+    //   }
+    // };
+    // let's calculate linear difference of estimated and measured ruby (R0)
+    const diff = initialRefRuby - getEstimatedRuby(refTemp);
+    console.log(initialRefRuby, getEstimatedRuby(refTemp));
+    // let's estimate R0 @ sample temperature @ 1atm
+    const estimatedRefRuby = getEstimatedRuby(samTemp) + diff;
+    // // let's estimate R0 line @296K @ 1atm
+    // const estimatedAmbientRuby = initialRefRuby - getDiffRuby(refTemp);
+    // // let's estimate R0 line @sample temperature @1atm
+    // const estimatedTrueRefRuby = estimatedAmbientRuby + getDiffRuby(samTemp);
+    // setCalibratedRuby(Math.round(estimatedTrueRefRuby / 0.001) * 0.001);
+    setCalibratedRuby(estimatedRefRuby);
+    return estimatedRefRuby;
   };
 
   const calcP = (ref: number, sam: number, eq: Equation) => {
@@ -163,7 +179,6 @@ export const PressureEstimation: NextPage = () => {
   };
 
   useEffect(() => {
-    // console.log(calcR(refRubyInt, refRubyDec), calcR(samRubyInt, samRubyDec))
     setEstimatedP(
       calcP(calcR(refRubyInt, refRubyDec), calcR(samRubyInt, samRubyDec), eq)
     );
@@ -173,6 +188,7 @@ export const PressureEstimation: NextPage = () => {
     samRubyInt,
     samRubyDec,
     eq,
+    tempCal,
     refTempCal,
     samTempCal,
   ]);
@@ -239,11 +255,9 @@ export const PressureEstimation: NextPage = () => {
                 }}
               ></TextField>
               <TempCalibCaution temp={refTempCal} />
-              {tempCal && (
-                <div className={classes.calibratedRuby}>
-                  Calibrated result: {calibratedRuby}nm
-                </div>
-              )}
+              <div className={classes.calibratedRuby}>
+                {tempCal && <>(Calibrated Reference: {calibratedRuby}nm)</>}
+              </div>
             </div>
           </div>
 
@@ -303,7 +317,7 @@ export const PressureEstimation: NextPage = () => {
               <>
                 Temperature Calibration
                 <br />
-                [Datchi et. al. (2007)]
+                [Ragan et. al. (1992)]
               </>
             }
           />
