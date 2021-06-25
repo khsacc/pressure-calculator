@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { Scatter } from "react-chartjs-2";
 import { Datum } from "./common";
+import { Button } from "@material-ui/core";
 
 export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
   const getTimeNum = (date: Date) => {
@@ -84,9 +85,10 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
       },
     ],
   };
+
   return (
     <>
-      <div>
+      <div id="chart1">
         <Scatter
           data={chartData}
           type=""
@@ -103,7 +105,7 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
           }}
         ></Scatter>
       </div>
-      <div>
+      <div id="chart2">
         <Scatter
           type=""
           data={tempChartData}
@@ -131,7 +133,7 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
           }}
         ></Scatter>
       </div>
-      <div>
+      <div id="chart3">
         <Scatter
           type=""
           data={pressChartData}

@@ -200,7 +200,47 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
 
   useEffect(() => {
     setCsvData(generateCSV());
-  }, [localStorageData]);
+  }, [localStorageData, localStorageDataJSON]);
+
+  const downloadFile = (href: string, filename: string) => {
+    const virtualDLButton = document.createElement("a");
+    virtualDLButton.href = href;
+    virtualDLButton.download = filename;
+    virtualDLButton.click();
+    virtualDLButton.remove();
+  };
+
+  const downloadData = () => {
+    const now = new Date().toLocaleString();
+    const getChartFile = (id: string) =>
+      (document.getElementById(id).firstChild as HTMLCanvasElement).toDataURL();
+    [
+      {
+        href: getChartFile("chart1"),
+        filename: "pTPath",
+        ext: "png",
+      },
+      {
+        href: getChartFile("chart2"),
+        filename: "temp",
+        ext: "png",
+      },
+      {
+        href: getChartFile("chart3"),
+        filename: "press",
+        ext: "png",
+      },
+      {
+        href: `data:text/csv;charset=utf-16,${encodeURIComponent(
+          "\uFEFF" + csvData
+        )}`,
+        filename: "pTPath",
+        ext: "csv",
+      },
+    ].forEach((e) => {
+      downloadFile(e.href, `${now}_${e.filename}.${e.ext}`);
+    });
+  };
 
   // Accordion
   const [expanded1, setExpanded1] = useState(true);
@@ -263,24 +303,24 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
             Copy Data to Clipboard
           </Button>
           <br />
-          <a
+          {/* <a
             download={`PTPath.csv`}
             href={`data:text/csv;charset=utf-16,${encodeURIComponent(
               "\uFEFF" + csvData
             )}`}
+          > */}
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={() => {
+              downloadData();
+              console.log(localStorageDataJSON);
+            }}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              onClick={() => {
-                // copyData();
-                console.log(localStorageDataJSON);
-              }}
-            >
-              Export data as CSV
-            </Button>
-          </a>
+            Export data
+          </Button>
+          {/* </a> */}
 
           <br />
           <Button
