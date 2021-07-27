@@ -19,8 +19,8 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
       {
         label: "p-T path",
         fill: false,
-        backgroundColor: "rgba(75,192,192,0.4)",
-        pointBorderColor: "rgba(75,192,192,1)",
+        backgroundColor: "rgba(0, 0, 0, 1)",
+        pointBorderColor: "rgba(0, 0, 0, 1)",
         pointBackgroundColor: "#fff",
         pointBorderWidth: 5,
         pointHoverRadius: 10,
@@ -43,8 +43,8 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
       {
         label: "temperature",
         fill: false,
-        backgroundColor: "rgba(75,192,192,0.4)",
-        pointBorderColor: "rgba(75,192,192,1)",
+        backgroundColor: "rgba(0, 0, 0, 1)",
+        pointBorderColor: "rgba(0, 0, 0, 1)",
         pointBackgroundColor: "#fff",
         pointBorderWidth: 5,
         pointHoverRadius: 10,
@@ -67,8 +67,8 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
       {
         label: "pressure",
         fill: false,
-        backgroundColor: "rgba(75,192,192,0.4)",
-        pointBorderColor: "rgba(75,192,192,1)",
+        backgroundColor: "rgba(0, 0, 0, 1)",
+        pointBorderColor: "rgba(0, 0, 0, 1)",
         pointBackgroundColor: "#fff",
         pointBorderWidth: 5,
         pointHoverRadius: 10,
