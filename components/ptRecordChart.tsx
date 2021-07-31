@@ -91,6 +91,7 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
       <div id="chart1">
         <Scatter
           data={chartData}
+          height={350}
           type=""
           options={{
             scales: {
