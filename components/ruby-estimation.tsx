@@ -2,11 +2,15 @@ import { NextPage } from "next";
 import { useCommonStyles } from "./common";
 import { TextField, Paper } from "@material-ui/core";
 import { useEffect, useState } from "react";
+import { common } from "@material-ui/core/colors";
 
-export const RubyEstimation: NextPage = () => {
+export const RubyEstimation: NextPage<{ commonCurrentTemp: number }> = ({
+  commonCurrentTemp,
+}) => {
   const classes = useCommonStyles();
 
-  const [refRubyTemp, setRefRubyTemp] = useState("300");
+  // const [refRubyTemp, setRefRubyTemp] = useState("300");
+  const refRubyTemp = commonCurrentTemp;
   const [estimatedR0Ragan, setEstimatedR0Ragan] = useState(0);
   const [estimatedR0Jahren, setEstimatedR0Jahren] = useState(0);
 
@@ -28,8 +32,10 @@ export const RubyEstimation: NextPage = () => {
 
   return (
     <>
-      <h2>Ruby Fluorescence Estimation @ambient pressure</h2>
-      <span className={classes.atMark}>T=</span>
+      <h2>
+        Ruby Fluorescence Estimation @ambient pressure, {commonCurrentTemp} K
+      </h2>
+      {/* <span className={classes.atMark}>T=</span>
       <TextField
         required
         label=""
@@ -40,10 +46,10 @@ export const RubyEstimation: NextPage = () => {
         onChange={(e) => {
           setRefRubyTemp(e.target.value);
         }}
-      />
+      /> */}
       <Paper className={classes.paper} elevation={3}>
         <p>
-          Estimated ruby R<sub>0</sub> fluorescence shift
+          Estimated ruby R<sub>0</sub> fluorescence shift @{commonCurrentTemp} K
         </p>
         <p className={classes.display}>{estimatedR0Ragan} nm</p>
         <p>

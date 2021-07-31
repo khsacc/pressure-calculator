@@ -74,7 +74,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const PressureEstimation: NextPage = () => {
+export const PressureEstimation: NextPage<{
+  setCommonCurrentTemp: (number) => void;
+  commonCurrentTemp: number;
+}> = ({ setCommonCurrentTemp, commonCurrentTemp }) => {
   const classes = useStyles(Theme);
   const commonClasses = useCommonStyles(Theme);
 
@@ -105,7 +108,8 @@ export const PressureEstimation: NextPage = () => {
   };
 
   const [refTempCal, setRefTempCal] = useState(300);
-  const [samTempCal, setSamTempCal] = useState(300);
+  // const [samTempCal, setSamTempCal] = useState(300);
+  const samTempCal = commonCurrentTemp;
 
   const [calibratedRuby, setCalibratedRuby] = useState(0);
 
@@ -293,7 +297,7 @@ export const PressureEstimation: NextPage = () => {
               tempCal ? "" : classes.calibration__disabled,
             ].join(" ")}
           >
-            <span className={commonClasses.atMark}>Sample T[K] =</span>
+            {/* <span className={commonClasses.atMark}>Sample T[K] =</span>
             <TextField
               label=""
               type="number"
@@ -304,7 +308,7 @@ export const PressureEstimation: NextPage = () => {
               onChange={(e) => {
                 setSamTempCal(Number(e.target.value));
               }}
-            ></TextField>
+            ></TextField> */}
             <TempCalibCaution temp={samTempCal} />
           </div>
 
@@ -390,6 +394,8 @@ export const PressureEstimation: NextPage = () => {
       </div>
 
       <PTRecord
+        setCommonCurrentTemp={setCommonCurrentTemp}
+        commonCurrentTemp={commonCurrentTemp}
         currentData={{
           pressure: estimatedP,
           samRuby: calcR(samRubyInt, samRubyDec),

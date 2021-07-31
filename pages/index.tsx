@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles(Theme);
+  const [commonCurrentTemp, setCommonCurrentTemp] = useState(300);
 
   return (
     <div className={classes.container}>
@@ -43,13 +44,16 @@ export default function Home() {
         <h1 className={classes.heading}>Pressure Calculator</h1>
 
         <section className={classes.section}>
-          <PressureEstimation />
+          <PressureEstimation
+            setCommonCurrentTemp={setCommonCurrentTemp}
+            commonCurrentTemp={commonCurrentTemp}
+          />
         </section>
         {/* <div className={classes.section}>
           <TemperatureCalibration />
         </div> */}
         <section className={classes.section}>
-          <RubyEstimation />
+          <RubyEstimation commonCurrentTemp={commonCurrentTemp} />
         </section>
         {/* <section className={classes.section}>
           <Fit />

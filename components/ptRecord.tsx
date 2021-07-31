@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     // color: theme.palette.primary.main
   },
   accordionWrap: {
-    marginTop: "15px",
+    // marginTop: "15px",
     marginLeft: "15px",
     minWidth: 450,
   },
@@ -61,9 +61,11 @@ const useStyles = makeStyles((theme) => ({
 
 const itemName = "ptRecord";
 
-export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
-  currentData,
-}) => {
+export const PTRecord: NextPage<{
+  currentData: RawDatum;
+  setCommonCurrentTemp: (number) => void;
+  commonCurrentTemp: number;
+}> = ({ currentData, setCommonCurrentTemp, commonCurrentTemp }) => {
   const classes = useStyles(Theme);
   const commonClasses = useCommonStyles(Theme);
 
@@ -248,20 +250,34 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
   const [expanded3, setExpanded3] = useState(false);
 
   return (
-    <div className={classes.accordionWrap}>
-      <Accordion
-        className={classes.accordion}
-        expanded={expanded1}
-        onChange={() => {
-          setExpanded1(!expanded1);
-        }}
-      >
-        <AccordionSummary>
-          <TimelineIcon className={classes.timelineIcon} color="primary" />
-          p-T path record control (click here to {expanded1 ? "close" : "open"})
-        </AccordionSummary>
-        <AccordionDetails className={classes.accordionDetail}>
-          <Typography>Current Temperature [K]</Typography>
+    <>
+      <div className={classes.accordionWrap}>
+        <h2>Current Temperature [K]</h2>
+        <TextField
+          required
+          label=""
+          type="number"
+          defaultValue={300}
+          variant="outlined"
+          className={[commonClasses.numericalInput, classes.numInput].join(" ")}
+          onChange={(e) => {
+            setCommonCurrentTemp(Number(e.target.value));
+          }}
+        />
+        <Accordion
+          className={classes.accordion}
+          expanded={expanded1}
+          onChange={() => {
+            setExpanded1(!expanded1);
+          }}
+        >
+          <AccordionSummary>
+            <TimelineIcon className={classes.timelineIcon} color="primary" />
+            p-T path record control (click here to{" "}
+            {expanded1 ? "close" : "open"})
+          </AccordionSummary>
+          <AccordionDetails className={classes.accordionDetail}>
+            {/* <Typography>Current Temperature [K]</Typography>
           <TextField
             required
             label=""
@@ -274,120 +290,121 @@ export const PTRecord: NextPage<{ currentData: RawDatum }> = ({
             onChange={(e) => {
               setCurrentTemp(Number(e.target.value));
             }}
-          />
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<CreateIcon />}
-            className={classes.button}
-            onClick={() => {
-              recordCurrentValue({
-                pressure: currentData.pressure,
-                temperature: currentTemp,
-                refRuby: currentData.refRuby,
-                samRuby: currentData.samRuby,
-              });
-            }}
-          >
-            Record current value
-          </Button>
-          <br />
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={() => {
-              copyData();
-            }}
-          >
-            Copy Data to Clipboard
-          </Button>
-          <br />
-          {/* <a
+          /> */}
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<CreateIcon />}
+              className={classes.button}
+              onClick={() => {
+                recordCurrentValue({
+                  pressure: currentData.pressure,
+                  temperature: commonCurrentTemp,
+                  refRuby: currentData.refRuby,
+                  samRuby: currentData.samRuby,
+                });
+              }}
+            >
+              Record current value
+            </Button>
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() => {
+                copyData();
+              }}
+            >
+              Copy Data to Clipboard
+            </Button>
+            <br />
+            {/* <a
             download={`PTPath.csv`}
             href={`data:text/csv;charset=utf-16,${encodeURIComponent(
               "\uFEFF" + csvData
             )}`}
           > */}
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={() => {
-              downloadData();
-              console.log(localStorageDataJSON);
-            }}
-          >
-            Export data
-          </Button>
-          {/* </a> */}
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={() => {
+                downloadData();
+                console.log(localStorageDataJSON);
+              }}
+            >
+              Export data
+            </Button>
+            {/* </a> */}
 
-          <br />
-          <Button
-            className={classes.button}
-            onClick={() => {
-              deleteAllValues();
-            }}
-          >
-            Delete all data
-          </Button>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded2}
-        onChange={() => {
-          setExpanded2(!expanded2);
-        }}
-      >
-        <AccordionSummary>
-          <TimelineIcon className={classes.timelineIcon} color="primary" />
-          p-T path record raw data (click here to {expanded2 ? "close" : "open"}
-          )
-        </AccordionSummary>
-        <AccordionDetails className={classes.accordionDetail}>
-          <List>
-            {localStorageDataJSON.map((datum, idx) => (
-              <ListItem
-                key={idx}
-                button
-                onClick={() => {
-                  deleteValue(idx);
-                }}
-              >
-                <ListItemIcon>
-                  <HighlightOffIcon
-                    color="primary"
-                    className={classes.deleteIcon}
-                  />
-                </ListItemIcon>
-                <ListItemText>
-                  [{new Date(datum.time).toLocaleString()}]{" "}
-                  <span className={classes.rawDataPrimitive}>
-                    T=
-                    {datum.temperature}K, P={datum.pressure}GPa
-                  </span>
-                  <br />
-                  (λ={datum.samRuby}nm, λ<sub>0</sub>= {datum.refRuby}nm)
-                </ListItemText>
-              </ListItem>
-            ))}
-          </List>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expanded3}
-        onChange={() => {
-          setExpanded3(!expanded3);
-        }}
-      >
-        <AccordionSummary>
-          <TimelineIcon className={classes.timelineIcon} color="primary" />
-          p-T path record chart (click here to {expanded3 ? "close" : "open"})
-        </AccordionSummary>
-        <AccordionDetails className={classes.accordionDetail}>
-          <PTRecordChart data={localStorageDataJSON} />
-        </AccordionDetails>
-      </Accordion>
-    </div>
+            <br />
+            <Button
+              className={classes.button}
+              onClick={() => {
+                deleteAllValues();
+              }}
+            >
+              Delete all data
+            </Button>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={expanded2}
+          onChange={() => {
+            setExpanded2(!expanded2);
+          }}
+        >
+          <AccordionSummary>
+            <TimelineIcon className={classes.timelineIcon} color="primary" />
+            p-T path record raw data (click here to{" "}
+            {expanded2 ? "close" : "open"})
+          </AccordionSummary>
+          <AccordionDetails className={classes.accordionDetail}>
+            <List>
+              {localStorageDataJSON.map((datum, idx) => (
+                <ListItem
+                  key={idx}
+                  button
+                  onClick={() => {
+                    deleteValue(idx);
+                  }}
+                >
+                  <ListItemIcon>
+                    <HighlightOffIcon
+                      color="primary"
+                      className={classes.deleteIcon}
+                    />
+                  </ListItemIcon>
+                  <ListItemText>
+                    [{new Date(datum.time).toLocaleString()}]{" "}
+                    <span className={classes.rawDataPrimitive}>
+                      T=
+                      {datum.temperature}K, P={datum.pressure}GPa
+                    </span>
+                    <br />
+                    (λ={datum.samRuby}nm, λ<sub>0</sub>= {datum.refRuby}nm)
+                  </ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion
+          expanded={expanded3}
+          onChange={() => {
+            setExpanded3(!expanded3);
+          }}
+        >
+          <AccordionSummary>
+            <TimelineIcon className={classes.timelineIcon} color="primary" />
+            p-T path record chart (click here to {expanded3 ? "close" : "open"})
+          </AccordionSummary>
+          <AccordionDetails className={classes.accordionDetail}>
+            <PTRecordChart data={localStorageDataJSON} />
+          </AccordionDetails>
+        </Accordion>
+      </div>
+    </>
   );
 };
