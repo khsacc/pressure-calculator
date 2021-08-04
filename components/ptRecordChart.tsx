@@ -1,7 +1,8 @@
 import { NextPage } from "next";
 import { Scatter } from "react-chartjs-2";
 import { Datum } from "./common";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
+import { useState } from "react";
 
 export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
   const getTimeNum = (date: Date) => {
@@ -86,9 +87,18 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
     ],
   };
 
+  const [minT, setMinT] = useState(0);
+
   return (
     <>
       <div id="chart1">
+        min-T:{" "}
+        <TextField
+          defaultValue={0}
+          onChange={(e) => {
+            setMinT(Number(e.target.value));
+          }}
+        ></TextField>
         <Scatter
           data={chartData}
           height={350}
@@ -100,7 +110,7 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
                 // max: 3,
               },
               y: {
-                min: 0,
+                min: minT,
               },
             },
           }}
