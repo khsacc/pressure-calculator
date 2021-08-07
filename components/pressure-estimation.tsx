@@ -210,9 +210,9 @@ export const PressureEstimation: NextPage<{
     }
   };
 
-  useEffect(() => {
-    setRefTempCal(commonCurrentTemp);
-  }, [commonCurrentTemp]);
+  // useEffect(() => {
+  // setRefTempCal(commonCurrentTemp);
+  // }, [commonCurrentTemp]);
 
   return (
     <div className={classes.whole}>
