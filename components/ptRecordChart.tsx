@@ -91,7 +91,7 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
 
   return (
     <>
-      <div id="chart1">
+      <div>
         min-T:{" "}
         <TextField
           defaultValue={0}
@@ -99,9 +99,12 @@ export const PTRecordChart: NextPage<{ data: Datum[] }> = ({ data }) => {
             setMinT(Number(e.target.value));
           }}
         ></TextField>
+      </div>
+      <div id="chart1">
         <Scatter
           data={chartData}
-          height={350}
+          height={400}
+          // width={400}
           type=""
           options={{
             scales: {
