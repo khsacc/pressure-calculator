@@ -6,6 +6,7 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
+  InputAdornment,
   makeStyles,
   Paper,
   Radio,
@@ -209,6 +210,10 @@ export const PressureEstimation: NextPage<{
     }
   };
 
+  useEffect(() => {
+    setRefTempCal(commonCurrentTemp);
+  }, [commonCurrentTemp]);
+
   return (
     <div className={classes.whole}>
       <div>
@@ -246,14 +251,20 @@ export const PressureEstimation: NextPage<{
                 tempCal ? "" : classes.calibration__disabled,
               ].join(" ")}
             >
-              <span className={commonClasses.atMark}>Ref T[K] =</span>
+              <span className={commonClasses.atMark}>Reference T =</span>
               <TextField
                 label=""
                 type="number"
                 disabled={!tempCal}
-                defaultValue={300}
+                defaultValue={commonCurrentTemp}
+                value={refTempCal}
                 variant="outlined"
                 className={classes.numericalInput}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">K</InputAdornment>
+                  ),
+                }}
                 onChange={(e) => {
                   setRefTempCal(Number(e.target.value));
                 }}

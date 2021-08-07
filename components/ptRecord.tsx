@@ -9,6 +9,7 @@ import {
   List,
   ListItemIcon,
   ListItemText,
+  InputAdornment,
 } from "@material-ui/core";
 import TimelineIcon from "@material-ui/icons/Timeline";
 import CreateIcon from "@material-ui/icons/Create";
@@ -252,7 +253,7 @@ export const PTRecord: NextPage<{
   return (
     <>
       <div className={classes.accordionWrap}>
-        <h2>Current Temperature [K]</h2>
+        <h2>Current Temperature</h2>
         <TextField
           required
           label=""
@@ -260,6 +261,9 @@ export const PTRecord: NextPage<{
           defaultValue={300}
           variant="outlined"
           className={[commonClasses.numericalInput, classes.numInput].join(" ")}
+          InputProps={{
+            endAdornment: <InputAdornment position="start">K</InputAdornment>,
+          }}
           onChange={(e) => {
             setCommonCurrentTemp(Number(e.target.value));
           }}
