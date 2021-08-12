@@ -214,35 +214,38 @@ export const PTRecord: NextPage<{
   };
 
   const downloadData = () => {
-    const now = new Date().toLocaleString();
+    // const now = new Date().toLocaleString();
+    const filePrefix = window.prompt("file name?");
     const getChartFile = (id: string) =>
       (document.getElementById(id).firstChild as HTMLCanvasElement).toDataURL();
-    [
-      {
-        href: getChartFile("chart1"),
-        filename: "pTPath",
-        ext: "png",
-      },
-      {
-        href: getChartFile("chart2"),
-        filename: "temp",
-        ext: "png",
-      },
-      {
-        href: getChartFile("chart3"),
-        filename: "press",
-        ext: "png",
-      },
-      {
-        href: `data:text/csv;charset=utf-16,${encodeURIComponent(
-          "\uFEFF" + csvData
-        )}`,
-        filename: "pTPath",
-        ext: "csv",
-      },
-    ].forEach((e) => {
-      downloadFile(e.href, `${now}_${e.filename}.${e.ext}`);
-    });
+    if (filePrefix) {
+      [
+        {
+          href: getChartFile("chart1"),
+          filename: "pTPath",
+          ext: "png",
+        },
+        {
+          href: getChartFile("chart2"),
+          filename: "temp",
+          ext: "png",
+        },
+        {
+          href: getChartFile("chart3"),
+          filename: "press",
+          ext: "png",
+        },
+        {
+          href: `data:text/csv;charset=utf-16,${encodeURIComponent(
+            "\uFEFF" + csvData
+          )}`,
+          filename: "pTPath",
+          ext: "csv",
+        },
+      ].forEach((e) => {
+        downloadFile(e.href, `${filePrefix}_${e.filename}.${e.ext}`);
+      });
+    }
   };
 
   // Accordion
