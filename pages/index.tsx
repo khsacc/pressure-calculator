@@ -42,6 +42,10 @@ export default function Home() {
 
       <main>
         <h1 className={classes.heading}>Pressure Calculator</h1>
+        <p>
+          Bug report or improvement request: please contact
+          hiroki@eqchem.s.u-tokyo.ac.jp
+        </p>
 
         <section className={classes.section}>
           <PressureEstimation

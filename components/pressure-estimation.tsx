@@ -2,6 +2,10 @@ import classes from "*.module.css";
 import { NextPage } from "next";
 import React, { useState, useEffect } from "react";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -183,6 +187,21 @@ export const PressureEstimation: NextPage<{
     }
   };
 
+  const [doEstT, setDoEstT] = useState(false);
+
+  const estimateT = (__ref: number) => {
+    const estWavenumberRagan =
+      14423 +
+      4.49e-2 * 300 -
+      4.81e-4 * Math.pow(300, 2) +
+      3.71e-7 * Math.pow(300, 3);
+    // setEstimatedR0Ragan(
+    const estWavelengthRagan =
+      Math.round(10 ** 7 / (estWavenumberRagan * 0.001)) * 0.001;
+    // );
+    const refDiff = __ref - estWavelengthRagan;
+  };
+
   useEffect(() => {
     setEstimatedP(
       calcP(calcR(refRubyInt, refRubyDec), calcR(samRubyInt, samRubyDec), eq)
@@ -337,6 +356,24 @@ export const PressureEstimation: NextPage<{
             }
           />
           <br />
+          {/* <FormControlLabel
+            control={
+              <Checkbox
+                checked={doEstT}
+                onChange={() => {
+                  setDoEstT(!doEstT);
+                }}
+              />
+            }
+            label={
+              <>
+                Temperature Estimation
+                <br />
+                [Ragan et. al. (1992)]
+              </>
+            }
+          />
+          <br /> */}
         </form>
         <Paper className={classes.paper} elevation={3}>
           <p>Estimated sample pressure</p>
@@ -402,6 +439,46 @@ export const PressureEstimation: NextPage<{
             </RadioGroup>
           </FormControl>
         </Paper>
+        {/* ここ未完成 */}
+        {/* <Accordion
+          expanded={doEstT}
+          onChange={() => {
+            setDoEstT(!doEstT);
+          }}
+        >
+          <AccordionSummary>Temperature Estimation</AccordionSummary>
+          <AccordionDetails>
+            <div>
+              <h2>
+                Reference Ruby (λ<sub>0</sub>) [nm] @ 300 K
+              </h2>
+              <br />
+              <TextField
+                required
+                label=""
+                type="number"
+                defaultValue={defaultValues.integer}
+                variant="outlined"
+                className={classes.numericalInput}
+                onChange={(e) => {
+                  setRefRubyInt(e.target.value);
+                }}
+              />
+              <span className={classes.dot}>.</span>
+              <TextField
+                required
+                label=""
+                type="number"
+                defaultValue={defaultValues.decimal}
+                variant="outlined"
+                className={classes.numericalInput}
+                onChange={(e) => {
+                  setRefRubyDec(e.target.value);
+                }}
+              />
+            </div>
+          </AccordionDetails>
+        </Accordion> */}
       </div>
 
       <PTRecord
