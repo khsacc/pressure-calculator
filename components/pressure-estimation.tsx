@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   numericalInput: {
     width: 100,
   },
+  temperatureInput: {
+    width: 150,
+  },
   dot: {
     fontWeight: "bold",
     fontSize: "2em",
@@ -246,7 +249,7 @@ export const PressureEstimation: NextPage<{
             type="number"
             defaultValue={defaultValues.integer}
             variant="outlined"
-            className={classes.numericalInput}
+            className={[classes.numericalInput].join(" ")}
             onChange={(e) => {
               setRefRubyInt(e.target.value);
             }}
@@ -278,7 +281,7 @@ export const PressureEstimation: NextPage<{
                 defaultValue={commonCurrentTemp}
                 value={refTempCal}
                 variant="outlined"
-                className={classes.numericalInput}
+                className={classes.temperatureInput}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="start">K</InputAdornment>

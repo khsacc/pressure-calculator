@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
   numInput: {
     display: "block",
     margin: "10px 0",
+    width: 150,
   },
   rawDataLine: {
     padding: 5,
